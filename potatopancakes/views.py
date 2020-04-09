@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from urllib2 import *
+from django.shortcuts import render, redirect
+#from urllib2 import *
 import solr
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -17,5 +18,6 @@ def Home():
 
     
 
-def Test():
-    return HttpResponse("hello")
+def test(request):
+    context = "sdasdasd"
+    return render(request, 'home.html')
