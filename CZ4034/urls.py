@@ -19,5 +19,8 @@ from potatopancakes import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.test, name="test"),
+    path('', views.home, name="home"),
+    path('search/term=<str:searchterm>/author=<str:author>/hashtag=<str:hashtag>/sort=<str:sort>/category=<str:category>/', views.search, name="search"),
+    path('geeks/', views.geeks_view),
+
 ]

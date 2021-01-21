@@ -2,9 +2,11 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\css\bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\js\bootstrap.js"></script>
     <link href="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\css\bootstrap.css" rel="stylesheet">
-    <link href="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\css\bootstrap-theme.css" rel="stylesheet">
+    <!-- <link href="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\css\bootstrap-theme.css" rel="stylesheet"> -->
     <link href="\static\bootstrap-4.3.1-dist\bootstrap-4.3.1-dist\css\bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -42,24 +44,56 @@
         background: linear-gradient(to right, #5B86E5, #36D1DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     }
 
+    form {
+        width: 100%;
+    }
+
     .searchSection {
         width: 70%;
-        height: 300px;
+        height: 250px;
         margin: 0 auto;
         display: flex;
         align-items: center;
         padding: 0 5% 0 5%;
+
     }
 
-    .searchSection .btn-primary {
-        background-color: #3D3D59;
+    .dropdown-group {
+        background-color:#74838C;
         color: #fff;
-        border-color: #3D3D59;
+        border-color: #fff;
         width: 10%;
+        border-radius:4px;
+        display: inline-block;
+        height: 30px;
+        position: absolute;      
     }
+
+    .dropdown-group a:hover{
+        cursor: pointer;
+    }
+
 
     .searchSection input[type=text] {
-        width: 85%;
+        width: 68%;
+        margin-right: 1%;
+        display: inline;
+    }
+
+    .search-type {
+        display: inline;
+    }
+
+    .search-type select{
+        width: 20%;
+        display: inline;
+        margin-right: 1%;
+
+    }
+
+    .search-type button {
+        background-color: aliceblue;
+        margin-top: -0.2%;
     }
 
     .container-top h2 {
@@ -111,7 +145,6 @@
     }
 
     .dropdown-toggle {
-        border:1px solid black;
         width: 100%;
         text-align: left;
     }
@@ -123,7 +156,77 @@
     .label-button-grp {
         margin-left: 7%;
     }
-    
+
+    .categorySection, .btn-group{
+        width:100%;
+    }
+
+    .top-btn-grp, .btm-btn-grp {
+        width:95%;
+        display: block;
+        margin: 0 auto;
+        padding-bottom: 0.5%;
+        padding-top: 0.5%;
+    }
+
+    .post-container {
+        /* border: 1px solid black; */
+        margin: 0 auto;
+        margin-bottom: 5%;
+    }
+
+    .post-picture {
+        width: 650px;
+        border:2px solid #eee;
+        border-radius: 4px;
+        margin: 0 auto;
+        padding: 1%;
+    }
+
+    .post-picture img {
+        margin-bottom: 1%;
+        margin-left: 0.5%;
+
+    }
+
+    .post-author {
+        position: relative;
+        text-align: left;
+        display: inline;
+    }
+
+    .post-author label {
+        width: 100%;
+    }
+
+    .post-author h4 {
+        display: inline-block;
+    }
+
+    .profile-pic {
+        border-radius: 80px;
+        align-items: left;
+   
+    }
+
+    .notes {
+        width: 100%;
+        text-align: center;
+    }
+
+    .caption {
+        font-size: 14px;
+    }
+
+    .message-box {
+        background-color: #eee;
+        border-radius: 4px;
+        width: 650px;
+        padding: 1%;
+        margin: 0 auto;
+        margin-bottom: 1%;
+    }
+
 
 
 
@@ -138,7 +241,7 @@
                 <div class="collapse navbar-collapse order-0 mr-auto">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="navbar-brand" href="#">Potato Pancakes</a>
+                            <a class="navbar-brand" href="http://127.0.0.1:8000/">Potato Pancakes</a>
                         </li>
                     </ul>
                 </div>
@@ -156,67 +259,573 @@
             <div class="msgSection">
                 <h2>Welcome!</h2>
                 <h3>What would you like to search for today?</h3>
+                <h3></h3>
             </div>
             
             <!--search bar-->
             <div class="searchSection">
-                <input type="text" class="form-control" placeholder="Enter Search Query">
-                <button class="btn btn-primary ml-auto" type="submit">Search</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" id="searchquery" name="searchquery" class="form-control" placeholder="Enter Search Query">
+                    <!-- <button class="btn btn-primary ml-auto" type="button" onclick="term_search()">Search</button> -->
+
+                    <div class="search-type">
+                        <select class="form-control" id="searchmenu" onchange="logsearchtype()">
+                            <option value="term">Term Search</option>
+                            <option value="hashtag">Hashtag Search</option>
+                        </select>
+                        <button class="btn" type="button" onclick="getSearchType()">Search</button>
+                    </div>
+
+                    
+                </form>
             </div>
+            
         </div>
         <div class="container-bottom">
             <div class="row">
                 <div class="categorySection col-md-2">
                     <h4>Browse Categories</h4>
                     <div class="btn-group-vertical" role="group">
-                        <button type="button" class="cat-item btn">All<span class="material-icons">keyboard_arrow_right</span></button>
-                        <button type="button" class="cat-item btn">Cat 1<span class="material-icons">keyboard_arrow_right</span></button>
-                        <button type="button" class="cat-item btn">Cat 2<span class="material-icons">keyboard_arrow_right</span></button>
-                        <button type="button" class="cat-item btn">Cat 3<span class="material-icons">keyboard_arrow_right</span></button>
-
+                        <button type="button" class="cat-item btn" onclick="category_search('all')" id="all">All</button>
+                        <button type="button" class="cat-item btn" onclick="category_search('world')" id="world">World</button>
+                        <button type="button" class="cat-item btn" onclick="category_search('society')" id="society">Society</button>
+                        <button type="button" class="cat-item btn" onclick="category_search('lifestyle')" id="lifestyle">Lifestyle</button>
                     </div>
                 </div>
 
                 <div class="mainSection col-md-7">
-                    <h4>Main section</h4>
+                    <h4 style="text-align: center;">Main Feed</h4>
+                        <div class="message-box">
+                            {% if queryterm %}
+                                <h5>Displaying results for: {{ queryterm }}</h5>
+                            {% endif %}
+
+                            {% if suggestionmessage %}
+                                <h5>Do you mean {{ suggestionmessage }} ?</h5>
+                                <h5>Displaying results for: {{suggestionmessage }}</h5>
+                            {% endif %}
+
+                            {% if errormessage %}
+                                <h5>{{ errormessage }}</h5>
+                            {% endif %}
+                        </div>
+
+                    
+
+                    <div class="search message">
+
+                    </div>
+
+                    {% for col in results %}
+                    <div class="post-container">
+                        <div class="post-picture">
+                            <img src= {{ col.img_url }} height="500" width="625">
+
+                            <div class="post-author">
+                                <label>
+                                    <h4>{{ col.author }} news</h4>
+                                </label>
+                            </div>
+
+                            <div class="post-body">
+                                <p class="caption">{{ col.unprocessed_comments }}</p>
+                            </div>
+                            <div class="post-hashtags">
+                                <p class="category">category: {{ col.labels }}</p>
+                            </div>
+                            <!--likes and date-->
+                            <div class="post-notes">
+                                <label class="notes">
+                                    <p>{{ col.datetime }} · {{ col.likes }} likes</p>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+
                 </div>
 
                 <div class="sideSection col-md-3">
                     <div class="sortingSection">
                         <h4>Sort By</h4>
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button">
-                                Default
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Time</a>
-                                <a class="dropdown-item" href="#">Number of Likes</a>
-                            </div>
+                        <div class="sort-menu">
+                            <select class="form-control" onchange="getSort()" id="sortmenu">
+                                <option value="default">Default</option>
+                                <option value="mostlikes">Most Likes</option>
+                                <option value="mostrecent">Most Recent</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="newsSection">
                         <h4>News Sources</h4>
-                            <div class="label-button-grp">
-                                <input class="form-check-input" type="radio" name="newsRadio" value="straits-times" checked>
-                                <label class="form-check-label">Straits Times</label>
-                            </div>
-                            
-                            <div class="label-button-grp">
-                                <input class="form-check-input" type="radio" name="newsRadio" value="cna" checked>
-                                <label class="form-check-label">Channel News Asia</label>
-                            </div>
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="abc" id="abc" onchange="logcheck(this)">
+                            <label for="abc">ABC News</label>
+                        </div>
 
-                            <div class="label-button-grp">
-                                <input class="form-check-input" type="radio" name="newsRadio" value="cnn" checked>
-                                <label class="form-check-label">CNN</label>
-                            </div>
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="au" id="au" onchange="logcheck(this)">
+                            <label for="au">AU News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="bbc" id="bbc" onchange="logcheck(this)">
+                            <label for="bbc">BBC News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="cbs" id="cbs" onchange="logcheck(this)">
+                            <label for="cbs">CBS News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="cnbc" id="cnbc" onchange="logcheck(this)">
+                            <label for="cnbc">CNBC News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="fox" id="fox" onchange="logcheck(this)">
+                            <label for="fox">Fox News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="guardian" id="guardian" onchange="logcheck(this)">
+                            <label for="guardian">The Guardian</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="nbc" id="nbc" onchange="logcheck(this)">
+                            <label for="nbc">NBC News</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="nytimes" id="nytimes" onchange="logcheck(this)">
+                            <label for="nytimes">New York Times</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="straits times" id="straits times" onchange="logcheck(this)">
+                            <label for="straits times">The Straits Times</label>
+                        </div>
+
+                        <div class="label-checkbox-grp">
+                            <input type="checkbox" name="author" value="washington post" id="washington post" onchange="logcheck(this)">
+                            <label for="washington post">Washington Post</label>
+                        </div>
+                                
+                            <button type="button" id="filter" onclick="news_sources()">Apply Filters</button>
+                            
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+
+    <!--javascript section-->
+    <!--
+        1. search by term
+        2. search by hashtag
+        3. applying of filters
+        4. sorting by likes/time
+
+        no searching of term and hashtag can happen at the same time
+        searching by categories: need to check if its search by term/hashtag and need to see any check boxes are checked
+        whenever you want to search by term/hashtag: need to check if there is any checked boxes checked
+    -->
+    <script>
+
+        //storing the text into sessions
+        const source = document.getElementById('searchquery');
+        
+        const inputHandler = function(e) {
+            //stores it in session
+            sessionStorage.setItem('searchterm', e.target.value)
+        }
+        
+        source.addEventListener('input', inputHandler);
+
+        function nextpage() {
+            console.log(window.location.href)
+            //get the current url then add the page element to it
+            currenturl = window.location.href
+            current_page_no = sessionStorage.getItem("pagenumber")
+            current_page_no = current_page_no + 1
+            currenturl = currenturl + "/page=" + sessionStorage.getItem("pagenumber")
+            console.log(currenturl)
+            
+        }
+
+        function category_search(category) {
+            //get the category and the query term entered in the search bar
+            var catname = category
+            sessionStorage.setItem("category", catname)
+            //setting the css to notify the user that this button is clicked
+            //check if its hashtag search or term search
+            //check for any instances of term/hashtag
+            searchtype = sessionStorage.getItem("searchtype")
+            //if null/term == means its term search
+            if (searchtype == null || searchtype == "term") {
+                var searchterm =  document.getElementById("searchquery").value;
+                if (searchterm == "") {
+                    urlstring = '/search/term=null/author='
+                } else {
+                    urlstring = '/search/term=' + searchterm + '/author='
+                }
+                hashtagterm = "null"
+            } else {
+                urlstring = '/search/term=null/author='
+                var hashtagterm = document.getElementById("searchquery").value;
+            }
+
+            // next check if the guy got any existing authors marked
+            urlstring = check_author(urlstring)
+            lastchar = urlstring.substr(-1);
+            if (lastchar == "=") {
+                urlstring = urlstring + "null/"
+            }
+            
+            //set the hashtag term in the url
+            urlstring = urlstring + 'hashtag=' + hashtagterm + '/'
+            
+            //set sort method in the url
+            urlstring = check_sorting(urlstring)
+
+            //set the category
+            urlstring = urlstring + 'category=' + catname + "/"
+
+            console.log(urlstring)
+
+            //redirect
+            window.location.href = urlstring
+        }
+
+        function check_author(urlstring) {
+            var checked_list = sessionStorage.getItem("checkedlist")
+            checked_list = JSON.parse(checked_list)
+            console.log(checked_list)
+            //if checkbox list is not empty then need to add to the url
+            if (checked_list != null) {
+                if (checked_list.length > 0) {
+                for (var i = 0; i < checked_list.length; i++) {
+                    if (i != checked_list.length - 1) {
+                        urlstring = urlstring + checked_list[i] + "&"
+                    }
+                    else {
+                        urlstring = urlstring + checked_list[i] + "/"
+                    }
+                    
+                }}
+            }
+
+            else {
+                urlstring = urlstring + 'null/'
+            }
+
+            return urlstring
+        }
+
+        function getSearchType() {
+            searchtype = document.getElementById("searchmenu").value
+            console.log(searchtype)
+            if (searchtype == "term") {
+                term_search()
+            } else {
+                hashtag_search()
+            }
+            
+            //store the type of search the user is currently on
+            sessionStorage.setItem("searchtype", searchtype)
+        }
+
+        function logsearchtype() {
+            searchtype = document.getElementById("searchmenu").value
+            sessionStorage.setItem("searchtype", searchtype)
+        }
+
+        //get sorted way
+        function getSort() {
+            //set to session for the type of sorting
+            sorttype = document.getElementById("sortmenu").value
+            console.log(sorttype)
+            sessionStorage.setItem("sorttype", sorttype)
+            
+            //check for any instances of term/hashtag
+            searchtype = sessionStorage.getItem("searchtype")
+            //if null/term == means its term search
+            if (searchtype == null || searchtype == "term") {
+                var searchterm =  document.getElementById("searchquery").value;
+                console.log(searchterm)
+                if (searchterm == "") {
+                    searchterm = "null"
+                }
+                urlstring = '/search/term=' + searchterm + '/author='
+                hashtagterm = "null"
+            }
+            else {
+                urlstring = '/search/term=null/author='
+                var hashtagterm = document.getElementById("searchquery").value;
+            }
+
+            // next check if the guy got any existing authors marked
+            urlstring = check_author(urlstring)
+            lastchar = urlstring.substr(-1);
+            if (lastchar == "=") {
+                urlstring = urlstring + "null/"
+            }
+            
+            //set the hashtag term in the url
+            urlstring = urlstring + 'hashtag=' + hashtagterm + '/'
+            
+            //set sort method in the url
+            urlstring = urlstring + 'sort=' + sorttype + "/"
+
+
+            //get current category
+            current_category = sessionStorage.getItem("category")
+    
+            if (current_category == null || current_category == "all") {
+                urlstring = urlstring + "category=all/"
+            } else if (current_category == "world") {
+                urlstring = urlstring + "category=world/"
+            } else if (current_category == "society") {
+                urlstring = urlstring + "category=society/"
+            } else if (current_category == "lifestyle") {
+                urlstring = urlstring + "category=lifestyle/"
+            }
+            console.log(urlstring)
+
+            //redirect
+            window.location.href = urlstring
+            
+        }
+
+        function check_sorting(urlstring) {
+            var sorttype = sessionStorage.getItem("sorttype")
+            //if sorttype == null/default means default
+            if (sorttype == null || sorttype == "default") {
+                urlstring = urlstring + "sort=default/"
+            } else if (sorttype == "mostlikes") {
+                urlstring = urlstring + "sort=mostlikes/"
+            } else {
+                urlstring = urlstring + "sort=mostrecent/"
+            }
+
+            return urlstring
+        }
+
+        // textbox search
+        function term_search() {
+            //get whatever its entered in the textbox
+            var searchterm =  document.getElementById("searchquery").value;
+
+            //check for any occurences of author
+
+            //predefine url string
+            urlstring = '/search/term=' + searchterm + "/author="
+
+            //check for instances of any author 
+            urlstring = check_author(urlstring)
+            console.log(urlstring)
+            lastchar = urlstring.substr(-1);
+            if (lastchar == "=") {
+                urlstring = urlstring + "null/"
+            }
+
+            //check for instances of any sorting
+
+            //since its term search, hashtag will be left null
+            urlstring = urlstring + 'hashtag=null/'
+
+            //check for any sorting method applied
+            urlstring = check_sorting(urlstring)
+            console.log(urlstring)
+            
+
+            //get current category
+            current_category = sessionStorage.getItem("category")
+    
+            if (current_category == null || current_category == "all") {
+                urlstring = urlstring + "category=all/"
+            } else if (current_category == "world") {
+                urlstring = urlstring + "category=world/"
+            } else if (current_category == "society") {
+                urlstring = urlstring + "category=society/"
+            } else if (current_category == "lifestyle") {
+                urlstring = urlstring + "category=lifestyle/"
+            }
+            
+            window.location.href = urlstring
+        }
+
+        function logcheck(checkbox) {
+            //if checked then need to update the current list
+            checked_list = sessionStorage.getItem("checkedlist")
+            var currentlist = JSON.parse(checked_list)
+            if (checkbox.checked) {
+                //means that there is no checked box recorded yet 
+                if (checked_list == null) {
+                    var templist = []
+                    templist.push(checkbox.value)
+                    sessionStorage.setItem("checkedlist", JSON.stringify(templist))
+                }
+                //update the list by pushing in
+                else {
+                    currentlist.push(checkbox.value)
+                    sessionStorage.setItem("checkedlist", JSON.stringify(currentlist))
+                }
+            }
+            //if someone uncheck any item
+            else {
+                //find the item in the list
+                var index = currentlist.indexOf(checkbox.value)
+                currentlist.splice(index, 1)
+                sessionStorage.setItem("checkedlist", JSON.stringify(currentlist))
+            }
+        }
+
+        function hashtag_search() {
+            var hashtagterm = document.getElementById("searchquery").value;
+            //remove any spaces
+            hashtagterm = hashtagterm.replace(" ", '');
+            
+            //check for any checkboxes
+            var checked_list = sessionStorage.getItem("checkedlist")
+            checked_list = JSON.parse(checked_list)
+
+            console.log(checked_list)
+
+            //predefine url string
+            urlstring = '/search/term=null/author='
+
+            //check for instances of any author 
+            urlstring = check_author(urlstring)
+            lastchar = urlstring.substr(-1);
+            if (lastchar == "=") {
+                urlstring = urlstring + "null/"
+            }
+
+            //adding the hashtag
+            urlstring = urlstring + "hashtag=" + hashtagterm + "/"
+
+            //check sorting
+            urlstring = check_sorting(urlstring)
+
+            //get current category
+            current_category = sessionStorage.getItem("category")
+    
+            if (current_category == null || current_category == "all") {
+                urlstring = urlstring + "category=all/"
+            } else if (current_category == "world") {
+                urlstring = urlstring + "category=world/"
+            } else if (current_category == "society") {
+                urlstring = urlstring + "category=society/"
+            } else if (current_category == "lifestyle") {
+                urlstring = urlstring + "category=lifestyle/"
+            }
+
+            //redirect
+            window.location.href = urlstring
+        }
+
+
+        function news_sources() {
+
+            //add search term to the url first
+            //retrieving input from session
+            searchterm = sessionStorage.getItem('searchterm')
+            console.log(searchterm)
+            if (searchterm == "") {
+                searchterm = 'null'
+                console.log(searchterm)
+            }
+
+            urlstring = '/search/term='+searchterm+"/author="
+
+            //check for instances of any author 
+            urlstring = check_author(urlstring)
+            console.log(urlstring)
+            lastchar = urlstring.substr(-1);
+            if (lastchar == "=") {
+                urlstring = urlstring + "null/"
+            }
+
+            urlstring = urlstring + 'hashtag=null/'
+
+            //check for any sorting method applied
+            urlstring = check_sorting(urlstring)
+
+            //get current category
+            current_category = sessionStorage.getItem("category")
+    
+            if (current_category == null || current_category == "all") {
+                urlstring = urlstring + "category=all/"
+            } else if (current_category == "world") {
+                urlstring = urlstring + "category=world/"
+            } else if (current_category == "society") {
+                urlstring = urlstring + "category=society/"
+            } else if (current_category == "lifestyle") {
+                urlstring = urlstring + "category=lifestyle/"
+            }
+            
+            //redirect
+            window.location.href = urlstring
+
+        }
+
+        //load the previous input that the user have entered
+        //need to set the checkbox that was clicked as well
+        window.onload = function() {
+            //means he refresh
+            if (window.location.href == "http://127.0.0.1:8000/") {
+                $('#searchquery').val("");
+                //clear the checklist 
+                sessionStorage.removeItem('checkedlist');
+                sessionStorage.removeItem('searchterm');
+                sessionStorage.removeItem('searchtype');
+                sessionStorage.removeItem('sorttype');
+                sessionStorage.removeItem('category');
+                // sessionStorage.setItem('pagenumber', 1);
+            }
+            //when its a query link
+            else {
+                //show the previous term that the user has entered
+                var prevsearchterm = sessionStorage.getItem('searchterm');
+                if (prevsearchterm !== null) $('#searchquery').val(prevsearchterm);
+
+                //set select boxes
+                var prevsorttype = sessionStorage.getItem('sorttype');
+                if (prevsorttype !== null) $('#sortmenu').val(prevsorttype);
+
+                var prevsearchtype = sessionStorage.getItem('searchtype');
+                if (prevsearchtype !== null) $('#searchmenu').val(prevsearchtype);
+
+                //border around selected link for cat 
+                var prevcat = sessionStorage.getItem('category');
+                if (prevcat !== null) document.getElementById(prevcat).style.border = '1px solid black';
+
+                //show the checkboxes that are checked
+                var checked_list = sessionStorage.getItem("checkedlist")
+                checked_list = JSON.parse(checked_list)
+
+                //if there is something in the checked list, aka things are checked by the user, you need to display as checked
+                if (checked_list != null) {
+                for (var i = 0; i < checked_list.length; i++) {
+                    document.getElementById(checked_list[i]).checked = true;
+                    
+                }
+
+            }
+
+            }
+            
+        }
+
+    
+    </script>
 </body>
 
 </html>
